@@ -180,9 +180,58 @@ def check_lunar_age_compatibility(year1: str, year2: str) -> str:
     return f"💘 Gợi ý tham khảo tuổi âm lịch {y1} & {y2}: {reading}."
 
 
+def check_hollywood_actress_match(user_info: str, actress_name: str) -> str:
+    """Tra cứu độ tương thích ghép đôi giữa người dùng và một nữ diễn viên Hollywood nổi tiếng.
+
+    Args:
+        user_info: Cung hoàng đạo / MBTI / tính cách của người dùng (VD: 'Cự Giải', 'INTJ').
+        actress_name: Tên nữ diễn viên Hollywood (VD: 'Scarlett Johansson', 'Emma Watson', 'Zendaya', 'Anne Hathaway', 'Margot Robbie').
+
+    Returns:
+        Kết quả ghép đôi tương thích, chỉ số phù hợp và nhận xét về cặp đôi.
+    """
+    normalized_user = _normalize_text(user_info)
+    normalized_actress = _normalize_text(actress_name)
+    if normalized_user is None:
+        return _invalid_text_error("user_info")
+    if normalized_actress is None:
+        return _invalid_text_error("actress_name")
+
+    db = {
+        "scarlett johansson": {"zodiac": "Nhân Mã", "mbti": "ISTP", "vibe": "Quyến rũ, độc lập, hành động và cá tính."},
+        "emma watson": {"zodiac": "Bạch Dương", "mbti": "ESTJ", "vibe": "Thông minh, thanh lịch, quyết đoán và trí tuệ."},
+        "zendaya": {"zodiac": "Xử Nữ", "mbti": "ENFP", "vibe": "Thời thượng, ngọt ngào, đa tài và đầy năng lượng."},
+        "anne hathaway": {"zodiac": "Bọ Cạp", "mbti": "INFP", "vibe": "Sâu sắc, lãng mạn, tinh tế và giàu cảm xúc."},
+        "margot robbie": {"zodiac": "Cự Giải", "mbti": "ENFJ", "vibe": "Rạng rỡ, nhiệt huyết, chu đáo và lôi cuốn."},
+        "elizabeth olsen": {"zodiac": "Bảo Bình", "mbti": "ISFP", "vibe": "Bí ẩn, nghệ thuật, dịu dàng và cuốn hút."},
+        "emma stone": {"zodiac": "Bọ Cạp", "mbti": "ENFP", "vibe": "Hài hước, tự nhiên, tràn đầy sức sống và thông minh."}
+    }
+
+    matched_actress = None
+    for name in db:
+        if name in normalized_actress or normalized_actress in name:
+            matched_actress = name
+            break
+
+    if not matched_actress:
+        return (
+            f"🎬 Chưa có thông tin chi tiết cho diễn viên '{actress_name}'. "
+            "Dữ liệu hỗ trợ: Scarlett Johansson, Emma Watson, Zendaya, Anne Hathaway, Margot Robbie, Elizabeth Olsen, Emma Stone."
+        )
+
+    info = db[matched_actress]
+    return (
+        f"⭐ [Hollywood Match] Bạn & {actress_name.strip().title()}:\n"
+        f"• Cung hoàng đạo của cô ấy: {info['zodiac']} | MBTI: {info['mbti']}\n"
+        f"• Vibe tính cách: {info['vibe']}\n"
+        f"• Chỉ số tương thích: 92% (Cặp đôi đầy cảm hứng và cực kỳ thu hút lẫn nhau!)."
+    )
+
+
 AVAILABLE_TOOLS = {
     "check_horoscope_compatibility": check_horoscope_compatibility,
     "calculate_mbti_compatibility": calculate_mbti_compatibility,
     "check_lunar_age_compatibility": check_lunar_age_compatibility,
     "search_date_ideas": search_date_ideas,
+    "check_hollywood_actress_match": check_hollywood_actress_match,
 }
