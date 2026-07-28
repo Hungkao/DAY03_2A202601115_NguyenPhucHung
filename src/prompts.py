@@ -1,5 +1,5 @@
 """
-🧠 PROMPTS & SAFEGUARDS - CUPID AGENT (Dành cho Role 3: Prompt & Safeguard Engineer)
+🧠 PROMPTS & SAFEGUARDS - CUPID AGENT (Dành cho Role 3: Prompt & Safeguard Engineer - Nguyễn Tuấn Vũ)
 Cấu hình System Prompt cho Trợ Lý Ghép Đôi & Phân Tích Độ Tương Thích (Cupid Agent).
 """
 
@@ -30,6 +30,12 @@ Final Answer: Câu trả lời chi tiết, ấm áp và hóm hỉnh gửi cho ng
 BẮT ĐẦU:
 """
 
-# 🛡️ GUARDRAILS CONFIGURATION (PHANH AN TOÀN)
+# 🛡️ GUARDRAILS CONFIGURATION & FAILURE MODES (PHANH AN TOÀN - MỐC 1)
+# Các trường hợp lỗi dự kiến (Failure Modes):
+# 1. Malformed Args: AI hoặc người dùng nhập sai cú pháp (VD: check_horoscope_compatibility['Bạch Dương').
+# 2. Invalid Input: Cung/MBTI không tồn tại (VD: Cung 'Thủy Thủ Mặt Trăng', MBTI 'ABCD').
+# 3. Missing Params: Nhập thiếu tham số địa điểm/phong cách/ngân sách khi tìm nơi hẹn hò.
+# 4. Repeated Action: Agent bị kẹt lặp đi lặp lại 1 tool với cùng tham số.
+
 MAX_ITERATIONS = 3  # Giới hạn tối đa 3 vòng lặp Thought-Action để tránh lặp vô tận
 TIMEOUT_SECONDS = 10  # Timeout cho mỗi lần gọi tool
