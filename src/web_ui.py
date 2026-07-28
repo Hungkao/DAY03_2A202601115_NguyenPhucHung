@@ -160,6 +160,11 @@ def run_date_tool(location: str, vibe: str, budget: str) -> str:
     return search_date_ideas(location, vibe, budget)
 
 
+def run_hollywood_tool(user_info: str, actress_name: str) -> str:
+    """Gọi trực tiếp tool ghép đôi với nữ diễn viên Hollywood."""
+    return check_hollywood_actress_match(user_info, actress_name)
+
+
 # ============================================================================
 # GIAO DIỆN GRADIO
 # ============================================================================
@@ -240,8 +245,9 @@ with gr.Blocks() as demo:
             gr.Markdown("#### 📋 Thử nhanh với Test Cases có sẵn:")
             gr.Examples(
                 examples=[
+                    ["Tôi cung Cự Giải, hãy kiểm tra độ tương thích ghép đôi giữa tôi và Scarlett Johansson!"],
+                    ["Kiểm tra độ tương thích MBTI giữa INTJ và Emma Watson, sau đó gợi ý nơi hẹn hò tại Hà Nội."],
                     ["Phân tích độ tương thích trong tình yêu giữa nam Cự Giải và nữ Bọ Cạp."],
-                    ["Kiểm tra độ tương thích MBTI giữa INTJ và ENFP, gợi ý địa điểm hẹn hò lãng mạn tại Hà Nội."],
                     ["Phân tích độ tương thích giữa cung 'Thần Mã' và 'Phượng Hoàng' ngày 35/13/2026."],
                 ],
                 inputs=react_input,
@@ -251,7 +257,19 @@ with gr.Blocks() as demo:
         with gr.Tab("🛠️ Công Cụ (Tools)", id="tools_tab"):
             gr.Markdown("### 🛠️ Gọi trực tiếp từng Tool của Cupid Agent")
             
-            with gr.Accordion("🔮 Tra cứu Cung Hoàng Đạo", open=True):
+            with gr.Accordion("🎬 Ghép Đôi Với Nữ Diễn Viên Hollywood", open=True):
+                with gr.Row():
+                    user_info_input = gr.Textbox(label="Thông tin của bạn (Cung/MBTI/Tính cách)", placeholder="Cự Giải / INTJ", value="Cự Giải")
+                    actress_input = gr.Dropdown(
+                        label="Nữ diễn viên Hollywood",
+                        choices=["Scarlett Johansson", "Emma Watson", "Zendaya", "Anne Hathaway", "Margot Robbie", "Elizabeth Olsen", "Emma Stone"],
+                        value="Scarlett Johansson",
+                    )
+                    hollywood_btn = gr.Button("🎬 Tra Cứu Ghép Đôi", variant="primary")
+                hollywood_output = gr.Textbox(label="Kết quả Ghép Đôi Hollywood", lines=4)
+                hollywood_btn.click(fn=run_hollywood_tool, inputs=[user_info_input, actress_input], outputs=hollywood_output)
+
+            with gr.Accordion("🔮 Tra cứu Cung Hoàng Đạo", open=False):
                 with gr.Row():
                     sign1_input = gr.Textbox(label="Cung 1", placeholder="Cự Giải", value="Cự Giải")
                     sign2_input = gr.Textbox(label="Cung 2", placeholder="Bọ Cạp", value="Bọ Cạp")
@@ -259,7 +277,7 @@ with gr.Blocks() as demo:
                 horoscope_output = gr.Textbox(label="Kết quả", lines=2)
                 horoscope_btn.click(fn=run_horoscope_tool, inputs=[sign1_input, sign2_input], outputs=horoscope_output)
             
-            with gr.Accordion("🧩 Tra cứu MBTI", open=True):
+            with gr.Accordion("🧩 Tra cứu MBTI", open=False):
                 with gr.Row():
                     mbti1_input = gr.Textbox(label="MBTI 1", placeholder="INTJ", value="INTJ")
                     mbti2_input = gr.Textbox(label="MBTI 2", placeholder="ENFP", value="ENFP")
@@ -267,7 +285,7 @@ with gr.Blocks() as demo:
                 mbti_output = gr.Textbox(label="Kết quả", lines=2)
                 mbti_btn.click(fn=run_mbti_tool, inputs=[mbti1_input, mbti2_input], outputs=mbti_output)
             
-            with gr.Accordion("📍 Gợi ý Địa điểm Hẹn hò", open=True):
+            with gr.Accordion("📍 Gợi ý Địa điểm Hẹn hò", open=False):
                 with gr.Row():
                     loc_input = gr.Textbox(label="Thành phố", placeholder="Hà Nội", value="Hà Nội")
                     vibe_input = gr.Dropdown(
