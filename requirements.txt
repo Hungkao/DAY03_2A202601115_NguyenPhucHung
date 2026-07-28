@@ -1,5 +1,6 @@
-google-genai
+﻿google-genai
 openai
 anthropic
 python-dotenv
 requests
+gradio

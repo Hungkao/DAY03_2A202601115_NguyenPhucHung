@@ -147,8 +147,42 @@ def search_date_ideas(location: str, vibe: str, budget: str = "vừa phải") ->
     return "LỖI: Chưa có dữ liệu gợi ý hẹn hò cho địa điểm này. Hỗ trợ: Hà Nội, TP.HCM."
 
 
+def check_lunar_age_compatibility(year1: str, year2: str) -> str:
+    """Xem độ hợp tuổi âm lịch và mệnh ngũ hành giữa 2 năm sinh.
+
+    Args:
+        year1: Năm sinh thứ nhất (ví dụ: '1998').
+        year2: Năm sinh thứ hai (ví dụ: '2000').
+
+    Returns:
+        Gợi ý tham khảo về tuổi âm lịch và mệnh ngũ hành.
+    """
+    normalized_y1 = _normalize_text(year1)
+    normalized_y2 = _normalize_text(year2)
+    if normalized_y1 is None:
+        return _invalid_text_error("year1")
+    if normalized_y2 is None:
+        return _invalid_text_error("year2")
+    try:
+        y1 = int(normalized_y1)
+        y2 = int(normalized_y2)
+    except ValueError:
+        return "LỖI: Năm sinh phải là số nguyên hợp lệ."
+
+    # Logic tính toán đơn giản
+    diff = abs(y1 - y2)
+    if diff in {3, 6, 9}:
+        reading = "Tam hợp hoặc Lục hợp - Mối quan hệ hòa hợp, nâng đỡ nhau tốt"
+    elif diff in {4, 8}:
+        reading = "Tứ hành xung - Cần kiên nhẫn thấu hiểu và nhường nhịn nhau"
+    else:
+        reading = "Bình hòa - Có thể tự xây dựng hạnh phúc bền vững nếu cùng nỗ lực"
+    return f"💘 Gợi ý tham khảo tuổi âm lịch {y1} & {y2}: {reading}."
+
+
 AVAILABLE_TOOLS = {
     "check_horoscope_compatibility": check_horoscope_compatibility,
     "calculate_mbti_compatibility": calculate_mbti_compatibility,
+    "check_lunar_age_compatibility": check_lunar_age_compatibility,
     "search_date_ideas": search_date_ideas,
 }
